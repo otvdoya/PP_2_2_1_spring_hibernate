@@ -1,11 +1,15 @@
 package hiber.dao;
 
 import hiber.model.User;
+import hiber.model.Car;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
+import java.lang.reflect.Array;
 import java.util.List;
 
 @Repository
@@ -24,6 +28,19 @@ public class UserDaoImp implements UserDao {
    public List<User> listUsers() {
       TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
       return query.getResultList();
+   }
+
+   @Override
+   @Transactional
+   public User getUserByCar(Car car) {
+
+      List<Car> cars = sessionFactory
+              .getCurrentSession()
+              .createQuery("from Car where model = :param1 and series = :param2")
+              .setParameter("param1", car.getModel())
+              .setParameter("param2", car.getSeries())
+              .getResultList();
+      return cars.size() == 0 ? null : cars.get(0).getOwner();
    }
 
 }
