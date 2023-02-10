@@ -6,10 +6,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
-import java.lang.reflect.Array;
 import java.util.List;
 
 @Repository
@@ -31,9 +28,7 @@ public class UserDaoImp implements UserDao {
    }
 
    @Override
-   @Transactional
    public User getUserByCar(Car car) {
-
       List<Car> cars = sessionFactory
               .getCurrentSession()
               .createQuery("from Car where model = :param1 and series = :param2")
